@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="data:,">
+  <meta name="theme-color" content="#123c35">
+  <meta name="description" content="올해 강의 범위의 약물을 유사도로 추리하며 복습하는 1학년 시험대비 약물 꼬맨틀">
+  <title>약물 꼬맨틀</title>
+  <link rel="stylesheet" href="styles.css?v=20261001-6">
+</head>
+<body>
+  <a class="skip-link" href="#guessInput">입력창으로 바로가기</a>
+
+  <div class="app-shell">
+    <header class="site-header">
+      <a class="brand" href="../index.html" aria-label="학습 모드 선택으로 돌아가기">
+        <span class="brand-mark" aria-hidden="true">Rx</span>
+        <span>
+          <strong>약물 꼬맨틀</strong>
+          <small>DRUG SEMANTLE · 2026 LECTURES</small>
+        </span>
+      </a>
+      <button class="icon-button" id="openHelp" type="button" aria-label="게임 설명 열기" title="게임 설명">?</button>
+    </header>
+
+    <main class="game-layout">
+      <section class="play-panel" aria-labelledby="gameTitle">
+        <div class="eyebrow"><span class="pulse-dot"></span> 유사도로 좁혀가는 약리학</div>
+        <div class="intro-row">
+          <div>
+            <h1 id="gameTitle">오늘은 어떤 약물일까요?</h1>
+            <p>등록된 약물명을 입력하세요. 약리학적으로 가까울수록 점수가 높습니다.</p>
+          </div>
+          <button class="scope-button" id="openScope" type="button" aria-haspopup="dialog">
+            <span>선택한 범위</span>
+            <strong id="scopeSummary">선택 전</strong>
+          </button>
+        </div>
+
+        <form class="guess-form" id="guessForm" autocomplete="off">
+          <div class="combobox-wrap">
+            <label class="sr-only" for="guessInput">약물명</label>
+            <input
+              id="guessInput"
+              type="text"
+              role="combobox"
+              aria-autocomplete="list"
+              aria-controls="suggestions"
+              aria-expanded="false"
+              placeholder="예: Metformin"
+              inputmode="text"
+              spellcheck="false"
+            >
+            <div id="suggestions" class="suggestions" role="listbox" hidden></div>
+          </div>
+          <button class="primary-button" type="submit">추측하기</button>
+        </form>
+
+        <div class="action-row" aria-label="게임 조작">
+          <button class="text-button" id="newGame" type="button"><span aria-hidden="true">↻</span> 새 문제</button>
+          <button class="text-button" id="hintButton" type="button"><span aria-hidden="true">◇</span> 힌트</button>
+          <button class="text-button" id="shareButton" type="button"><span aria-hidden="true">↗</span> 공유</button>
+          <button class="text-button danger" id="giveUpButton" type="button">포기</button>
+        </div>
+
+        <div class="notice" id="notice" role="status" aria-live="polite"></div>
+        <div class="hint-strip" id="hintStrip" hidden></div>
+
+        <section class="result-card" id="answerResult" hidden aria-live="polite"></section>
+
+        <section class="attempts-section" aria-labelledby="attemptsTitle">
+          <div class="section-heading">
+            <div>
+              <span class="section-kicker">GUESS LOG</span>
+              <h2 id="attemptsTitle">추측 기록</h2>
+            </div>
+            <span class="sort-note">유사도 높은 순</span>
+          </div>
+
+          <div class="attempt-table-head" aria-hidden="true">
+            <span>약물</span><span>유사도</span><span>순위</span>
+          </div>
+          <div id="attemptList" class="attempt-list"></div>
+          <div id="emptyState" class="empty-state">
+            <div class="distance-scale" aria-hidden="true">
+              <span></span><span></span><span></span><span></span><span></span>
+            </div>
+            <strong>첫 번째 이름을 입력해 보세요.</strong>
+            <p>현재 학습 범위의 약물명을 입력하세요. 같은 대분류·약리학적 계열·핵심 특징이 겹칠수록 정답에 가까워집니다.</p>
+          </div>
+        </section>
+      </section>
+
+      <aside class="side-panel" aria-label="현재 게임 현황">
+        <div class="status-card">
+          <span class="section-kicker">CURRENT RUN</span>
+          <div class="metric-grid">
+            <div><strong id="guessCount">0</strong><span>추측</span></div>
+            <div><strong id="bestScore">—</strong><span>최고점</span></div>
+            <div><strong id="bestRank">—</strong><span>최고 순위</span></div>
+          </div>
+          <div class="proximity-block">
+            <div class="proximity-copy"><span>정답 접근도</span><strong id="proximityLabel">탐색 전</strong></div>
+            <div class="meter"><i id="proximityBar"></i></div>
+          </div>
+        </div>
+
+      </aside>
+
+      <section class="quick-guide" aria-labelledby="quickGuideTitle">
+        <div class="quick-guide-head">
+          <span class="section-kicker">QUICK START</span>
+          <h2 id="quickGuideTitle">간단 사용법</h2>
+        </div>
+        <ol>
+          <li><span>1</span><p><strong>대분류를 선택하세요.</strong> 선택한 범위의 약물만 정답과 입력 후보에 포함됩니다.</p></li>
+          <li><span>2</span><p><strong>영문 약물명을 입력하세요.</strong> 대소문자는 구분하지 않고 등록된 별칭도 허용합니다.</p></li>
+          <li><span>3</span><p><strong>유사도와 순위를 따라가세요.</strong> 점수가 높을수록 정답과 약리학적으로 가깝습니다.</p></li>
+        </ol>
+        <p class="refresh-note">새로고침하거나 ‘새 문제’를 누르면 선택 범위에서 정답 약물을 다시 무작위로 뽑습니다. 같은 약물이 연속으로 나올 수도 있습니다.</p>
+      </section>
+
+      <section class="catalog-section" aria-labelledby="catalogTitle">
+        <button class="catalog-toggle" id="catalogToggle" type="button" aria-expanded="false" aria-controls="catalogPanel">
+          <span><small>REFERENCE</small><strong id="catalogTitle">전체 약물 목록</strong></span>
+          <span class="catalog-toggle-meta">403개 <i aria-hidden="true">＋</i></span>
+        </button>
+        <div class="catalog-panel" id="catalogPanel" hidden>
+          <div class="table-wrap">
+            <table class="catalog-table">
+              <thead><tr><th>번호</th><th>약물명</th><th>대분류</th></tr></thead>
+              <tbody id="catalogBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <span>약리학 압축본·원본 강의자료 기반</span>
+      <span>실전 타자연습과 같은 403개 약물</span>
+    </footer>
+  </div>
+
+  <dialog id="scopeDialog" class="modal">
+    <form method="dialog" class="modal-card" id="scopeForm">
+      <div class="modal-head">
+        <div><span class="section-kicker">STUDY SCOPE</span><h2>학습 범위 설정</h2></div>
+        <button class="icon-button" id="scopeClose" value="cancel" aria-label="닫기">×</button>
+      </div>
+      <p class="modal-description">약리학 개별 강의를 선택하고, 오른쪽 토글을 열어 특정 약물만 고를 수도 있습니다. 선택한 약물 안에서만 정답이 출제됩니다.</p>
+      <fieldset class="difficulty-options">
+        <legend>난도</legend>
+        <label class="difficulty-card">
+          <input type="radio" name="difficulty" value="easy" checked>
+          <span><strong>Easy</strong><small>입력할 때 등록된 약물명 후보를 표시합니다.</small></span>
+        </label>
+        <label class="difficulty-card">
+          <input type="radio" name="difficulty" value="hard">
+          <span><strong>Hard</strong><small>후보 없이 약물명을 기억해 입력합니다.</small></span>
+        </label>
+      </fieldset>
+      <div class="preset-row">
+        <button type="button" class="preset-button" data-preset="all">전체 선택</button>
+        <button type="button" class="preset-button" data-preset="none">선택 해제</button>
+      </div>
+      <div id="lectureOptions" class="lecture-options"></div>
+      <div class="scope-count" id="scopeCount"></div>
+      <div class="modal-actions">
+        <button class="secondary-button" id="scopeCancel" value="cancel">취소</button>
+        <button class="primary-button" id="applyScope" value="default">이 범위로 시작</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="helpDialog" class="modal">
+    <form method="dialog" class="modal-card help-card">
+      <div class="modal-head">
+        <div><span class="section-kicker">HOW TO PLAY</span><h2>게임 방법</h2></div>
+        <button class="icon-button" value="cancel" aria-label="닫기">×</button>
+      </div>
+      <ol class="how-to-list">
+        <li><span>01</span><div><strong>대분류를 선택합니다.</strong><p>선택한 범위의 약물만 이번 게임에 포함됩니다.</p></div></li>
+        <li><span>02</span><div><strong>약물명을 입력합니다.</strong><p>Easy는 후보를 보여주고, Hard는 후보 없이 영문 약물명을 입력합니다.</p></div></li>
+        <li><span>03</span><div><strong>유사도와 순위를 읽습니다.</strong><p>점수는 정답과의 상대적 가까움이며, 순위는 현재 범위 안에서 계산됩니다.</p></div></li>
+      </ol>
+      <div class="help-note">
+        <strong>유사도는 어떻게 계산했나요?</strong>
+        <p>약리학 분류 35%(대분류 10·중분류 10·소분류 15), 검수된 특징 문구 40%, 작용 기전 10%, 임상 용도 10%, 부작용 3%, 상호작용 2%를 비교합니다. 강의 선택 범위와 약리학 분류는 별개이며, 약물명 철자는 점수에 반영하지 않습니다.</p>
+        <p>특징 문구는 문자 단위 비교와 로컬 LSA 근사로 계산합니다. 부작용·금기는 치료 용도로 취급하지 않고, 자료에 없는 사실은 추정하지 않습니다. 0.1 미만의 양의 점수는 &lt;0.1로 표시합니다.</p>
+      </div>
+      <button class="primary-button full-button" value="cancel">게임으로 돌아가기</button>
+    </form>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="data.js?v=20261001-6"></script>
+  <script src="app.js?v=20261001-6"></script>
+</body>
+</html>

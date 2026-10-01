@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="data:,">
+  <meta name="theme-color" content="#123c35">
+  <meta name="description" content="약리학적 계열과 표준 약물명을 함께 보고 따라 쓰는 약물명 타자연습">
+  <title>약물명 타자연습</title>
+  <link rel="stylesheet" href="styles.css?v=20261001-6">
+</head>
+<body>
+  <a class="skip-link" href="#answerInput">입력창으로 바로가기</a>
+
+  <div class="app-shell">
+    <header class="site-header">
+      <a class="brand" href="../index.html" aria-label="학습 모드 선택으로 돌아가기">
+        <span class="brand-mark" aria-hidden="true">Rx</span>
+        <span>
+          <strong>약물명 타자연습</strong>
+          <small>DRUG NAME PRACTICE · RANDOM PRACTICE</small>
+        </span>
+      </a>
+      <button class="icon-button" id="openHelp" type="button" aria-label="사용법 열기">?</button>
+    </header>
+
+    <main class="practice-layout">
+      <section class="practice-panel" aria-labelledby="pageTitle">
+        <div class="eyebrow"><span class="pulse-dot"></span> Pharmacologic class + Drug name → Typing</div>
+        <div class="intro-row">
+          <div>
+            <h1 id="pageTitle">보고, 따라 쓰고,<br>익숙해지세요.</h1>
+            <p>약리학적 계열과 표준 약물명을 함께 보며 그대로 입력해 연습합니다.</p>
+          </div>
+          <button class="scope-button" id="openScope" type="button" aria-haspopup="dialog">
+            <span>선택한 범위</span>
+            <strong id="scopeSummary">선택 전</strong>
+          </button>
+        </div>
+
+        <section class="question-card" id="questionCard" aria-live="polite">
+          <div class="question-meta">
+            <span id="macroBadge">—</span>
+            <span id="lectureBadge">학습 범위를 먼저 선택하세요</span>
+          </div>
+          <span class="question-label">약리학적 계열과 약물명을 함께 확인하세요.</span>
+          <h2 id="koreanPrompt">학습 대기 중</h2>
+          <p class="scientific-prompt" id="scientificPrompt">Drug name</p>
+          <p id="questionCounter">개별 강의를 선택하면 시작합니다.</p>
+        </section>
+
+        <form class="answer-form" id="answerForm" autocomplete="off">
+          <label class="sr-only" for="answerInput">영문 약물명</label>
+          <input id="answerInput" type="text" placeholder="Drug name" inputmode="text" spellcheck="false" disabled>
+          <button class="primary-button" id="answerButton" type="submit" disabled>확인</button>
+          <button class="secondary-button pass-button" id="passCard" type="button" disabled>패스</button>
+        </form>
+        <div class="feedback" id="feedback" role="status" aria-live="assertive"></div>
+
+        <div class="action-row">
+          <button class="text-button" id="restartDeck" type="button" disabled><span aria-hidden="true">↻</span> 다시 시작</button>
+          <button class="text-button" id="changeScope" type="button"><span aria-hidden="true">☷</span> 강의 다시 선택</button>
+        </div>
+
+        <section class="completion-card" id="completionCard" hidden aria-live="polite">
+          <span class="completion-badge">ROUND COMPLETE</span>
+          <h2>선택한 범위를 모두 마쳤습니다.</h2>
+          <p id="completionSummary"></p>
+          <button class="primary-button" id="repeatRound" type="button">다시 섞어서 연습</button>
+        </section>
+
+        <section class="recent-section" aria-labelledby="recentTitle">
+          <div class="section-heading">
+            <div><span class="section-kicker">JUST COMPLETED</span><h2 id="recentTitle">최근 학습</h2></div>
+            <span id="recentCount">0개</span>
+          </div>
+          <div class="recent-list" id="recentList"></div>
+          <div class="empty-state" id="emptyState">
+            <strong>아직 완료한 카드가 없습니다.</strong>
+            <p>답을 입력하거나 패스하면 여기에 최근 학습 기록이 쌓입니다.</p>
+          </div>
+        </section>
+      </section>
+
+      <aside class="side-panel" aria-label="학습 현황">
+        <div class="status-card">
+          <span class="section-kicker">CURRENT ROUND</span>
+          <div class="progress-copy"><span>진행률</span><strong id="progressText">0 / 0</strong></div>
+          <div class="progress-track"><i id="progressBar"></i></div>
+          <div class="metric-grid">
+            <div><strong id="correctCount">0</strong><span>정답</span></div>
+            <div><strong id="wrongCount">0</strong><span>오답</span></div>
+            <div><strong id="skippedCount">0</strong><span>패스</span></div>
+            <div><strong id="accuracyValue">—</strong><span>정확도</span></div>
+            <div><strong id="streakValue">0</strong><span>연속 정답</span></div>
+          </div>
+        </div>
+
+        <div class="rule-card">
+          <span class="section-kicker">ONE RULE</span>
+          <p><strong>한 번 입력하고 다음으로.</strong> 오답이나 패스 후에는 표준 약물명을 확인하고 다음 카드로 이동합니다.</p>
+        </div>
+      </aside>
+
+    </main>
+
+    <footer><span>약리학 압축본·원본 강의자료 기반</span><span>압축본 포함 범위</span></footer>
+  </div>
+
+  <dialog id="scopeDialog" class="modal">
+    <form method="dialog" class="modal-card" id="scopeForm">
+      <div class="modal-head">
+        <div><span class="section-kicker">STUDY SCOPE</span><h2>학습 범위 설정</h2></div>
+        <button class="icon-button" id="scopeClose" value="cancel" aria-label="닫기">×</button>
+      </div>
+      <p class="modal-description">기존 범위와 압축본 약물을 포함합니다.</p>
+      <div class="preset-row">
+        <button type="button" class="preset-button" data-preset="all">전체 선택</button>
+        <button type="button" class="preset-button" data-preset="none">선택 해제</button>
+      </div>
+      <label class="order-setting" for="orderMode">진행 순서 <select id="orderMode"><option value="random" selected>무작위</option><option value="code">코드 순서 · 특징 설명 순서</option></select></label>
+      <div id="lectureOptions" class="lecture-options"></div>
+      <div class="scope-count" id="scopeCount"></div>
+      <div class="modal-actions">
+        <button class="secondary-button" id="scopeCancel" value="cancel">취소</button>
+        <button class="primary-button" id="applyScope" value="default">이 범위로 시작</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="helpDialog" class="modal help-modal">
+    <form method="dialog" class="modal-card">
+      <div class="modal-head">
+        <div><span class="section-kicker">HOW TO PRACTICE</span><h2>약물명 타자연습 방법</h2></div>
+        <button class="icon-button" value="cancel" aria-label="닫기">×</button>
+      </div>
+      <ol class="help-list">
+        <li><span>01</span><p>처음에 연습할 약리학 대분류를 체크합니다.</p></li>
+        <li><span>02</span><p>표시된 계열과 영문 약물명을 확인하고 그대로 입력합니다.</p></li>
+        <li><span>03</span><p>오답이면 정답을 확인한 뒤 다음 카드로 이동합니다.</p></li>
+        <li><span>04</span><p>모르겠다면 패스하고 정답을 확인할 수 있습니다.</p></li>
+        <li><span>05</span><p>선택 범위를 한 바퀴 마치면 결과를 확인하고 선택한 순서로 다시 시작할 수 있습니다.</p></li>
+      </ol>
+      <button class="primary-button full-button" value="cancel">연습으로 돌아가기</button>
+    </form>
+  </dialog>
+
+  <script src="data.js?v=20261001-6"></script>
+  <script src="app.js?v=20261001-6"></script>
+</body>
+</html>
